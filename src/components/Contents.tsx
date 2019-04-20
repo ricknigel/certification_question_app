@@ -5,10 +5,19 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
+    content: {
+      width: 'auto',
+      marginLeft: theme.spacing(8 * 3),
+      marginRight: theme.spacing(8 * 3),
+      [theme.breakpoints.up(400 + theme.spacing(3 * 2))]: {
+        width: 400,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      },
+    },
     card: {
-      width: 500,
-      margin: '30px auto'
-    }
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
+    },
   }),
 );
 
@@ -47,9 +56,9 @@ const Contents = () => {
 
   // keyをしっかり指定
   return (
-    <div className={classes.card}>
+    <main className={classes.content}>
       {questionList.questions.map(items => (
-        <Card key={items.question}>
+        <Card key={items.question} className={classes.card}>
           <CardContent>
             <Typography>
               {items.question}
@@ -57,7 +66,7 @@ const Contents = () => {
           </CardContent>
         </Card>
       ))}
-    </div>
+    </main>
   );
 };
 
