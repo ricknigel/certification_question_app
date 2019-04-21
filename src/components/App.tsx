@@ -1,8 +1,8 @@
 import React from 'react';
 import withRoot from '../withRoot';
 import Header from './Header';
-import Contents from './Contents';
-import QuestionForm from './QuestionForm';
+import QuestionList from './QuestionList';
+import QuestionCreatorForm from './form/QuestionCreatorForm';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 const App = () => {
@@ -10,8 +10,8 @@ const App = () => {
     <BrowserRouter>
       <Header />
       <Switch>
-        <Route path="/" exact component={Contents} />
-        <Route path="/add" exact component={QuestionForm} />
+        <Route path="/" exact component={QuestionList} />
+        <Route path="/add" exact component={QuestionCreatorForm} />
       </Switch>
     </BrowserRouter>
   );

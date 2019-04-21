@@ -1,5 +1,6 @@
 import React from 'react';
 import marked from 'marked';
+import { Paper, Typography, Divider } from '@material-ui/core';
 
 interface Props {
   input: string
@@ -10,9 +11,13 @@ interface Props {
 const Markdown = (props: Props) => {
   const { input } = props;
   return (
-    <div 
-      dangerouslySetInnerHTML={{__html: marked(input)}}
-    ></div>
+    <Paper>
+      <Typography>Markdown Preview</Typography>
+      <Divider />
+      <div 
+        dangerouslySetInnerHTML={{__html: marked(input)}}
+      ></div>
+    </Paper>
   );
 };
 
