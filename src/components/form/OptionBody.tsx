@@ -1,39 +1,40 @@
 import React from 'react';
 import { TableRow, TableCell, IconButton, Tooltip } from '@material-ui/core';
 import { Edit, Delete, Check, Close } from '@material-ui/icons';
+import { OptionInfo } from '../util/types';
 
 interface Props {
-  option: string,
-  isAnswer: boolean,
-  editOption: (target: string) => void,
-  removeOption: (target: string) => void
+  index: number,
+  option: OptionInfo,
+  editOption: (index: number) => void,
+  removeOption: (index: number) => void
 }
 
 const OptionBody = (props: Props) => {
-  const { option, isAnswer, editOption, removeOption } = props;
+  const { index, option, editOption, removeOption } = props;
   return (
     <TableRow>
       <TableCell>
-        {/* <Tooltip title="Edit">
+        <Tooltip title="Edit">
           <IconButton 
             size="small"
-            onClick={() => editRow(content)}
+            onClick={() => editOption(index)}
           >
             <Edit />
           </IconButton>
-        </Tooltip> */}
+        </Tooltip>
         <Tooltip title="Delete Option">
           <IconButton 
             size="small" 
-            onClick={() => removeOption(option)}
+            onClick={() => removeOption(index)}
           >
             <Delete />
           </IconButton>
         </Tooltip>
       </TableCell>
-      <TableCell>{option}</TableCell>
+      <TableCell>{option.optionName}</TableCell>
       <TableCell>
-        { isAnswer ? <Check color="secondary" /> : <Close color="error" /> }
+        { option.isAnswer ? <Check color="secondary" /> : <Close color="error" /> }
       </TableCell>
     </TableRow>
   );

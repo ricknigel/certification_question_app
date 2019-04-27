@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Dialog, TextField, Button, Checkbox, DialogContent, DialogActions, DialogTitle, FormControlLabel, makeStyles, Typography, IconButton, Tooltip } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import { Close } from '@material-ui/icons';
-import { OptionInfo } from './QuestionCreatorForm';
+import { OptionInfo } from '../util/types';
 
 interface Props {
   open: boolean,
+  option?: OptionInfo,
   setOpen: (open: boolean) => void,
-  onClose: (optionInfo: OptionInfo) => void
+  onClose: (optionInfo: OptionInfo, index?: number) => void
 }
 
 const useStyles = makeStyles(() => 
@@ -25,19 +26,19 @@ const useStyles = makeStyles(() =>
 );
 
 const OptionFormDialog = (props: Props) => {
-  const { open, onClose, setOpen } = props;
+  const { open, option, setOpen, onClose } = props;
   const classes = useStyles();
-  const [option, setOption] = useState('');
-  const [isAnswer, setIsAnswer] = useState(false);
+  const [optionName, setOptionName] = useState(option ? option.optionName : '');
+  const [isAnswer, setIsAnswer] = useState(option ? option.isAnswer : false);
   const [message, setMessage] = useState('');
 
   const optionInfo = {
-    option: option,
+    optionName: optionName,
     isAnswer: isAnswer
   }
 
   const setInitialState = () => {
-    setOption('');
+    setOptionName('');
     setIsAnswer(false);
   }
 
@@ -47,7 +48,7 @@ const OptionFormDialog = (props: Props) => {
   };
 
   const handleSave = (optionInfo: OptionInfo) => {
-    if (!option) {
+    if (!optionName) {
       setMessage('option is empty');
       return
     }
@@ -77,9 +78,10 @@ const OptionFormDialog = (props: Props) => {
         <TextField 
           autoFocus
           required
-          error={option ? false : true}
-          label="Option" 
-          onChange={(e) => setOption(e.target.value)}
+          error={optionName ? false : true}
+          label="OptionName"
+          value={optionName}
+          onChange={(e) => setOptionName(e.target.value)}
         />
         <FormControlLabel 
           control={<Checkbox checked={isAnswer} onChange={() => setIsAnswer(!isAnswer)}/>} 

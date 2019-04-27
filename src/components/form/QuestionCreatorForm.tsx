@@ -5,11 +5,7 @@ import * as firebase from 'firebase/app';
 import { firestore } from '../../firebaseConfig';
 import Markdown from '../util/Markdown';
 import OptionList from './OptionList';
-
-export interface OptionInfo {
-  option: string,
-  isAnswer: boolean
-}
+import { OptionInfo } from '../util/types';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -43,9 +39,10 @@ const QuestionCreatorForm = () => {
   const [message, setMessage] = useState('');
   const classes = useStyles();
 
+  // TODO [...prev, add]に修正必要
   const addOptions = useCallback((add: OptionInfo[]) => {
     setOptions(() => [...add]);
-  }, [options]);
+  }, [setOptions]);
 
   const registerQuestion = () => {
     //TODO: Error Handle
@@ -53,23 +50,25 @@ const QuestionCreatorForm = () => {
       setMessage('exist empty field');
       return
     }
+    console.log(options);
 
-    firestore.collection('questions').add({
-      title: title,
-      question: question,
-      explanation: explanation,
-      options: options,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    })
-    .then((doc) => {
-      console.log(doc);
-      setMessage('done register question');
-    })
-    .catch((error) => {
-      console.log(error);
-      setMessage('failure register question');
-    });
+    // firestore.collection('java_silver').add({
+    //   title: title,
+    //   question: question,
+    //   explanation: explanation,
+    //   options: options,
+    //   answerTimes: 0,
+    //   correctTimes: 0,
+    //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //   modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    // })
+    // .then((doc) => {
+    //   setMessage('done register');
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    //   setMessage('failure register');
+    // });
   };
 
   return (
@@ -100,7 +99,7 @@ const QuestionCreatorForm = () => {
             onChange={e => setQuestion(e.target.value)}
           />
         </FormControl>
-        { question && <Markdown input={question} />}
+        { question && <Markdown title="Question Preview" input={question} />}
         <FormControl margin="normal" fullWidth>
           <TextField 
             label="Explanation"
@@ -112,7 +111,7 @@ const QuestionCreatorForm = () => {
             onChange={e => setExplanation(e.target.value)}
           />
         </FormControl>
-        { explanation && <Markdown input={explanation} />}
+        { explanation && <Markdown title="Explanation Preview" input={explanation} />}
         <OptionList addOptions={addOptions} options={options} />
         <div className={classes.sendButton}>
           <Button 

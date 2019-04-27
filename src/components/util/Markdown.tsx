@@ -4,15 +4,16 @@ import { Paper, Typography, Divider } from '@material-ui/core';
 
 interface Props {
   input: string
+  title: string
 }
 
 // TODO: syntax highlight
 // TODO: not use dangerouslySetInnerHTML Markdown
 const Markdown = (props: Props) => {
-  const { input } = props;
+  const { input, title } = props;
   return (
     <Paper>
-      <Typography>Markdown Preview</Typography>
+      <Typography>{title}</Typography>
       <Divider />
       <div 
         dangerouslySetInnerHTML={{__html: marked(input)}}

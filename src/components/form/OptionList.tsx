@@ -4,7 +4,7 @@ import { Add } from '@material-ui/icons';
 import { createStyles } from '@material-ui/styles';
 import OptionBody from './OptionBody';
 import OptionFormDialog from './OptionFormDialog';
-import { OptionInfo } from './QuestionCreatorForm';
+import { OptionInfo } from '../util/types';
 
 interface Props {
   options: OptionInfo[],
@@ -25,24 +25,36 @@ const useStyles = makeStyles((theme: Theme) =>
 const OptionList = (props: Props) => {
   const { options, addOptions } = props;
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [optionIndex, setOptionIndex] = useState(0);
+  const [openRegister, setOpenRegister] = useState(false);
+  const [openEditor, setOpenEditor] = useState(false);
 
-  const handleClose = useCallback((add: OptionInfo) => {
-    console.log([...options, add]);
+  const handleRegisterClose = useCallback((add: OptionInfo) => {
     addOptions([...options, add]);
-    setOpen(false);
-  }, [options]);
+    setOpenRegister(() => false);
+  }, [options, setOpenRegister]);
 
-  const editOption = (targetRow: string) => {
+  const handleEditorClose = useCallback((editOpt: OptionInfo) => {
+    const editOptions = [...options];
+    editOptions[optionIndex] = {
+      optionName: editOpt.optionName,
+      isAnswer: editOpt.isAnswer
+    }
+    addOptions(editOptions);
+    setOpenEditor(() => false);
+  }, [options, setOpenEditor, optionIndex]);
 
-  };
+  const editorOption = useCallback((index: number) => {
+    setOpenEditor(() => true);
+    setOptionIndex(() => index);
+  }, [setOpenEditor, setOptionIndex]);
 
-  const removeOption = (targetRow: string) => {
-    const newRows = options.filter((v) => {
-      return v.option != targetRow;
+  const removeOption = useCallback((targetIndex: number) => {
+    const newOptions = options.filter((value, index) => {
+      return index != targetIndex;
     });
-    addOptions(newRows);
-  };
+    addOptions(newOptions);
+  }, [options]);
 
   return (
     <Paper className={classes.paper}>
@@ -56,16 +68,23 @@ const OptionList = (props: Props) => {
         <Tooltip title="Add Options">
           <IconButton 
             size="small"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenRegister(true)}
           >
             <Add />
           </IconButton>
         </Tooltip>
         <OptionFormDialog 
-          open={open} 
-          setOpen={setOpen}
-          onClose={handleClose}
+          open={openRegister} 
+          setOpen={setOpenRegister}
+          onClose={handleRegisterClose}
         />
+        { openEditor &&
+          <OptionFormDialog
+            open={openEditor}
+            option={options[optionIndex]}
+            setOpen={setOpenEditor}
+            onClose={handleEditorClose}
+          /> }
       </Toolbar>
       <Table>
         <TableHead>
@@ -74,7 +93,7 @@ const OptionList = (props: Props) => {
               <Typography>Action</Typography>
             </TableCell>
             <TableCell>
-              <Typography>Option</Typography>
+              <Typography>OptionName</Typography>
             </TableCell>
             <TableCell>
               <Typography>Answer</Typography>
@@ -82,12 +101,12 @@ const OptionList = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {options.map(row => (
+          {options.map((value, index) => (
             <OptionBody
-              key={row.option}
-              option={row.option}
-              isAnswer={row.isAnswer}
-              editOption={editOption}
+              key={index}
+              index={index}
+              option={value}
+              editOption={editorOption}
               removeOption={removeOption}
             />
           ))}
