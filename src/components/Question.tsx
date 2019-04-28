@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Typography, ListItem, ListItemIcon, ListItemText, List, Checkbox } from '@material-ui/core';
+import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Markdown from './util/Markdown';
 import QuestionInfo from './util/types';

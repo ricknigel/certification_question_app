@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { TableRow, TableCell, IconButton, Tooltip } from '@material-ui/core';
 import { Edit, Delete, Check, Close } from '@material-ui/icons';
 import { OptionInfo } from '../util/types';
@@ -10,7 +10,7 @@ interface Props {
   removeOption: (index: number) => void
 }
 
-const OptionBody = (props: Props) => {
+const OptionBody = memo((props: Props) => {
   const { index, option, editOption, removeOption } = props;
   return (
     <TableRow>
@@ -38,6 +38,6 @@ const OptionBody = (props: Props) => {
       </TableCell>
     </TableRow>
   );
-};
+}, (prev, next) => prev.option === next.option);
 
 export default OptionBody;

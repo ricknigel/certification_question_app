@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Paper, Typography, FormControl, TextField, Button } from '@material-ui/core';
+import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import * as firebase from 'firebase/app';
 import { firestore } from '../../firebaseConfig';
 import Markdown from '../util/Markdown';
 import OptionList from './OptionList';
-import { OptionInfo } from '../util/types';
+import { OptionInfo, PartsSelection } from '../util/types';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: theme.spacing(3),
       },
     },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+    },
     sendButton: {
       marginTop: theme.spacing(3),
       display: 'flex',
@@ -32,6 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const QuestionCreatorForm = () => {
+  const [part, setPart] = useState('PART1');
+  const [questionNo, setQuestionNo] = useState(0);
   const [title, setTitle] = useState('');
   const [question, setQuestion] = useState('');
   const [explanation, setExplanation] = useState('');
@@ -39,36 +45,37 @@ const QuestionCreatorForm = () => {
   const [message, setMessage] = useState('');
   const classes = useStyles();
 
-  // TODO [...prev, add]に修正必要
+  // TODO [...prev, add]に修正必要?
   const addOptions = useCallback((add: OptionInfo[]) => {
     setOptions(() => [...add]);
   }, [setOptions]);
 
   const registerQuestion = () => {
     //TODO: Error Handle
-    if (!title || !question || !explanation || options.length === 0) {
+    if (!part || questionNo === 0 || !title || !question || !explanation || options.length === 0) {
       setMessage('exist empty field');
       return
     }
-    console.log(options);
 
-    // firestore.collection('java_silver').add({
-    //   title: title,
-    //   question: question,
-    //   explanation: explanation,
-    //   options: options,
-    //   answerTimes: 0,
-    //   correctTimes: 0,
-    //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //   modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    // })
-    // .then((doc) => {
-    //   setMessage('done register');
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    //   setMessage('failure register');
-    // });
+    firestore.collection('java_silver').add({
+      part: part,
+      questionNo: questionNo,
+      title: title,
+      question: question,
+      explanation: explanation,
+      options: options,
+      answerTimes: 0,
+      correctTimes: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then((doc) => {
+      setMessage('done register');
+    })
+    .catch((error) => {
+      console.log(error);
+      setMessage('failure register');
+    });
   };
 
   return (
@@ -78,11 +85,33 @@ const QuestionCreatorForm = () => {
       </Typography>
       <Typography color="error">{message}</Typography>
       <form>
+        <FormControl required variant="outlined" margin="normal">
+          <InputLabel>Part</InputLabel>
+          <Select 
+            value={part} 
+            onChange={e => setPart(e.target.value)}
+            input={<OutlinedInput labelWidth={100} />}
+          >
+            {PartsSelection.map((value, index) => (
+              <MenuItem key={index} value={value.part}>{value.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl margin="normal" className={classes.textField}>
+          <TextField 
+            type="number"
+            label="Question No"
+            required
+            autoFocus
+            error={questionNo !== 0 ? false : true}
+            variant="outlined"
+            onChange={e => setQuestionNo(parseInt(e.target.value))}
+          />
+        </FormControl>
         <FormControl margin="normal" fullWidth>
           <TextField 
             label="Title"
             required
-            autoFocus
             error={title ? false : true}
             variant="outlined"
             onChange={e => setTitle(e.target.value)}
