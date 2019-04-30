@@ -63,7 +63,7 @@ const OptionList = (props: Props) => {
           className={classes.title}
           variant="h6"
         >
-          Options List
+          選択肢
         </Typography>
         <Tooltip title="Add Options">
           <IconButton 
@@ -90,13 +90,13 @@ const OptionList = (props: Props) => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography>Action</Typography>
+              <Typography>操作</Typography>
             </TableCell>
             <TableCell>
-              <Typography>OptionName</Typography>
+              <Typography>内容</Typography>
             </TableCell>
             <TableCell>
-              <Typography>Answer</Typography>
+              <Typography>答え</Typography>
             </TableCell>
           </TableRow>
         </TableHead>

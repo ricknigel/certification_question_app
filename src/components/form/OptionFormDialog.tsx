@@ -61,7 +61,7 @@ const OptionFormDialog = (props: Props) => {
       <DialogTitle>
         <div className={classes.title}>
           <Typography variant="h5">
-            Option
+            選択肢
           </Typography>
           <Tooltip title="Cancel">
             <IconButton
@@ -79,13 +79,13 @@ const OptionFormDialog = (props: Props) => {
           autoFocus
           required
           error={optionName ? false : true}
-          label="OptionName"
+          label="内容"
           value={optionName}
           onChange={(e) => setOptionName(e.target.value)}
         />
         <FormControlLabel 
           control={<Checkbox checked={isAnswer} onChange={() => setIsAnswer(!isAnswer)}/>} 
-          label="Answer"
+          label="答え"
         />
       </DialogContent>
       <DialogActions>
@@ -95,7 +95,7 @@ const OptionFormDialog = (props: Props) => {
           variant="outlined"
           onClick={() => handleSave(optionInfo)}
         >
-          Save
+          保存
         </Button>
       </DialogActions>
     </Dialog>

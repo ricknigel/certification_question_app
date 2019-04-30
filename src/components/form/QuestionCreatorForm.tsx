@@ -6,6 +6,7 @@ import { firestore } from '../../firebaseConfig';
 import Markdown from '../util/Markdown';
 import OptionList from './OptionList';
 import { OptionInfo, PartsSelection } from '../util/types';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -35,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const QuestionCreatorForm = () => {
+const QuestionCreatorForm = (props: RouteComponentProps) => {
+  const { history } = props;
   const [part, setPart] = useState('PART1');
   const [questionNo, setQuestionNo] = useState(0);
   const [title, setTitle] = useState('');
@@ -70,23 +72,23 @@ const QuestionCreatorForm = () => {
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then((doc) => {
-      setMessage('done register');
+      history.push('/complete');
     })
     .catch((error) => {
       console.log(error);
-      setMessage('failure register');
+      setMessage('問題の登録に失敗しました');
     });
   };
 
   return (
     <Paper className={classes.paper}>
       <Typography variant="h4">
-        Register Question
+        問題の登録フォーム
       </Typography>
       <Typography color="error">{message}</Typography>
       <form>
         <FormControl required variant="outlined" margin="normal">
-          <InputLabel>Part</InputLabel>
+          <InputLabel>大問</InputLabel>
           <Select 
             value={part} 
             onChange={e => setPart(e.target.value)}
@@ -100,7 +102,7 @@ const QuestionCreatorForm = () => {
         <FormControl margin="normal" className={classes.textField}>
           <TextField 
             type="number"
-            label="Question No"
+            label="小問"
             required
             autoFocus
             error={questionNo !== 0 ? false : true}
@@ -110,7 +112,7 @@ const QuestionCreatorForm = () => {
         </FormControl>
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="Title"
+            label="タイトル"
             required
             error={title ? false : true}
             variant="outlined"
@@ -119,7 +121,7 @@ const QuestionCreatorForm = () => {
         </FormControl>
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="Question"
+            label="問題(マークダウン)"
             required
             multiline
             error={question ? false : true}
@@ -128,10 +130,10 @@ const QuestionCreatorForm = () => {
             onChange={e => setQuestion(e.target.value)}
           />
         </FormControl>
-        { question && <Markdown title="Question Preview" input={question} />}
+        { question && <Markdown title="問題のプレビュー" input={question} />}
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="Explanation"
+            label="解説(マークダウン)"
             required
             multiline
             error={explanation ? false : true}
@@ -140,7 +142,7 @@ const QuestionCreatorForm = () => {
             onChange={e => setExplanation(e.target.value)}
           />
         </FormControl>
-        { explanation && <Markdown title="Explanation Preview" input={explanation} />}
+        { explanation && <Markdown title="解説のプレビュー" input={explanation} />}
         <OptionList addOptions={addOptions} options={options} />
         <div className={classes.sendButton}>
           <Button 
@@ -149,7 +151,7 @@ const QuestionCreatorForm = () => {
             variant="outlined"
             onClick={registerQuestion}
           >
-            Send
+            登録
           </Button>
         </div>
       </form>
@@ -157,4 +159,4 @@ const QuestionCreatorForm = () => {
   );
 };
 
-export default QuestionCreatorForm;
+export default withRouter(QuestionCreatorForm);

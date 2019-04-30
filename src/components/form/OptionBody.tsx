@@ -15,7 +15,7 @@ const OptionBody = memo((props: Props) => {
   return (
     <TableRow>
       <TableCell>
-        <Tooltip title="Edit">
+        <Tooltip title="編集">
           <IconButton 
             size="small"
             onClick={() => editOption(index)}
@@ -23,7 +23,7 @@ const OptionBody = memo((props: Props) => {
             <Edit />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete Option">
+        <Tooltip title="選択肢を削除">
           <IconButton 
             size="small" 
             onClick={() => removeOption(index)}

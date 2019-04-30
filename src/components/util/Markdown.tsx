@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import marked from 'marked';
-import { Paper, Typography, Divider } from '@material-ui/core';
+import { Typography, Divider } from '@material-ui/core';
 
 interface Props {
   input: string
-  title: string
+  title?: string
 }
 
 // TODO: syntax highlight
@@ -12,13 +12,13 @@ interface Props {
 const Markdown = (props: Props) => {
   const { input, title } = props;
   return (
-    <Paper>
-      <Typography>{title}</Typography>
+    <Fragment>
+      <Typography variant="h6">{title}</Typography>
       <Divider />
       <div 
         dangerouslySetInnerHTML={{__html: marked(input)}}
       ></div>
-    </Paper>
+    </Fragment>
   );
 };
 

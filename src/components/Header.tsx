@@ -26,7 +26,7 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography className={classes.nav} variant="h6">
-          <Link className={classes.link} to="/">Top</Link>
+          <Link className={classes.link} to="/question">Top</Link>
         </Typography>
         <Typography variant="h6">
           <Tooltip title="Register Question">
