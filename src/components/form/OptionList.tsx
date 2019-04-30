@@ -14,7 +14,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     paper: {
-      marginTop: theme.spacing(3),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     },
     title: {
       flexGrow: 1,
@@ -63,7 +64,7 @@ const OptionList = (props: Props) => {
           className={classes.title}
           variant="h6"
         >
-          選択肢
+          Options List
         </Typography>
         <Tooltip title="Add Options">
           <IconButton 
@@ -90,13 +91,13 @@ const OptionList = (props: Props) => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography>操作</Typography>
+              <Typography>Action</Typography>
             </TableCell>
             <TableCell>
-              <Typography>内容</Typography>
+              <Typography>OptionName</Typography>
             </TableCell>
             <TableCell>
-              <Typography>答え</Typography>
+              <Typography>Answer</Typography>
             </TableCell>
           </TableRow>
         </TableHead>

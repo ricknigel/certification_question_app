@@ -29,7 +29,7 @@ const QuestionList = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    firestore.collection('java_silver').get()
+    firestore.collection('java_silver').limit(10).get()
     .then((resp) => {
       resp.forEach((doc) => {
         const addQuestion: QuestionInfo = {

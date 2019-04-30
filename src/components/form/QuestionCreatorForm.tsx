@@ -66,6 +66,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       question: question,
       explanation: explanation,
       options: options,
+      deleteFlg: false,
       answerTimes: 0,
       correctTimes: 0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -76,19 +77,19 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
     })
     .catch((error) => {
       console.log(error);
-      setMessage('問題の登録に失敗しました');
+      setMessage('failure register');
     });
   };
 
   return (
     <Paper className={classes.paper}>
       <Typography variant="h4">
-        問題の登録フォーム
+        Register Question
       </Typography>
       <Typography color="error">{message}</Typography>
       <form>
         <FormControl required variant="outlined" margin="normal">
-          <InputLabel>大問</InputLabel>
+          <InputLabel>Part</InputLabel>
           <Select 
             value={part} 
             onChange={e => setPart(e.target.value)}
@@ -102,7 +103,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
         <FormControl margin="normal" className={classes.textField}>
           <TextField 
             type="number"
-            label="小問"
+            label="Question No"
             required
             autoFocus
             error={questionNo !== 0 ? false : true}
@@ -112,7 +113,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
         </FormControl>
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="タイトル"
+            label="Title"
             required
             error={title ? false : true}
             variant="outlined"
@@ -121,7 +122,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
         </FormControl>
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="問題(マークダウン)"
+            label="Question(Markdown)"
             required
             multiline
             error={question ? false : true}
@@ -130,10 +131,11 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             onChange={e => setQuestion(e.target.value)}
           />
         </FormControl>
-        { question && <Markdown title="問題のプレビュー" input={question} />}
+        { question && <Markdown title="Question Preview" input={question} />}
+        <OptionList addOptions={addOptions} options={options} />
         <FormControl margin="normal" fullWidth>
           <TextField 
-            label="解説(マークダウン)"
+            label="Explanation(Markdown)"
             required
             multiline
             error={explanation ? false : true}
@@ -142,8 +144,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             onChange={e => setExplanation(e.target.value)}
           />
         </FormControl>
-        { explanation && <Markdown title="解説のプレビュー" input={explanation} />}
-        <OptionList addOptions={addOptions} options={options} />
+        { explanation && <Markdown title="Explanation Preview" input={explanation} />}
         <div className={classes.sendButton}>
           <Button 
             size="large" 
@@ -151,7 +152,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             variant="outlined"
             onClick={registerQuestion}
           >
-            登録
+            Send
           </Button>
         </div>
       </form>

@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button, Card } from '@material-ui/core';
+import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button } from '@material-ui/core';
 import Markdown from './util/Markdown';
 import QuestionInfo from './util/types';
 import { createStyles } from '@material-ui/styles';
@@ -46,7 +46,7 @@ const Question = (props: Props) => {
 
   const sendAnswer = () => {
     if (checked.length === 0) {
-      setErrMessage('回答を選択して下さい');
+      setErrMessage('please select answer');
       return;
     }
 
@@ -82,7 +82,7 @@ const Question = (props: Props) => {
           variant="outlined"
           onClick={sendAnswer}
         >
-          回答する
+          Answer
         </Button>
       </div>
       { openAnswer &&
@@ -91,14 +91,14 @@ const Question = (props: Props) => {
             <Fragment>
               <Typography variant="h6" color="secondary">
                 <DoneOutline color="secondary" />
-                正解!
+                Correct!!
               </Typography>
             </Fragment> 
             : 
             <Fragment>
               <Typography variant="h6" color="error">
                 <Clear color="error" />
-                不正解
+                Not Correct
               </Typography>
             </Fragment> }
         </div> }
@@ -107,7 +107,7 @@ const Question = (props: Props) => {
           expandIcon={<ExpandMore />}
           onClick={() => setExpand(!expand)}
         >
-          解説
+          Explanation
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Markdown input={item.explanation} />
