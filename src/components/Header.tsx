@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, IconButton, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { createStyles } from '@material-ui/styles';
-import { AddCircle } from '@material-ui/icons';
+import { AddCircle, Home } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -26,11 +26,17 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography className={classes.nav} variant="h6">
-          <Link className={classes.link} to="/question">Top</Link>
+          <Tooltip title="home">
+            <Link className={classes.link} to="/">
+              <IconButton color="inherit">
+                <Home />
+              </IconButton>
+            </Link>
+          </Tooltip>
         </Typography>
         <Typography variant="h6">
           <Tooltip title="Register Question">
-            <Link className={classes.link} to="/add">
+            <Link className={classes.link} to="/java/silver/add">
               <IconButton color="inherit">
                 <AddCircle />
               </IconButton>

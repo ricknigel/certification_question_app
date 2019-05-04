@@ -4,7 +4,7 @@ import { Add } from '@material-ui/icons';
 import { createStyles } from '@material-ui/styles';
 import OptionBody from './OptionBody';
 import OptionFormDialog from './OptionFormDialog';
-import { OptionInfo } from '../util/types';
+import { OptionInfo } from '../../util/types';
 
 interface Props {
   options: OptionInfo[],

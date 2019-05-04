@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, TextField, Button, Checkbox, DialogContent, DialogActions, DialogTitle, FormControlLabel, makeStyles, Typography, IconButton, Tooltip } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import { Close } from '@material-ui/icons';
-import { OptionInfo } from '../util/types';
+import { OptionInfo } from '../../util/types';
 
 interface Props {
   open: boolean,

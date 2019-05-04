@@ -2,11 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import * as firebase from 'firebase/app';
-import { firestore } from '../../firebaseConfig';
-import Markdown from '../util/Markdown';
 import OptionList from './OptionList';
-import { OptionInfo, PartsSelection } from '../util/types';
 import { withRouter, RouteComponentProps } from 'react-router';
+import Markdown from '../../util/Markdown';
+import { OptionInfo, PartsSelection } from '../../util/types';
+import { firestore } from '../../../firebaseConfig';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const QuestionCreatorForm = (props: RouteComponentProps) => {
   const { history } = props;
-  const [part, setPart] = useState('PART1');
+  const [part, setPart] = useState('1');
   const [questionNo, setQuestionNo] = useState(0);
   const [title, setTitle] = useState('');
   const [question, setQuestion] = useState('');
@@ -72,8 +72,14 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .then((doc) => {
-      history.push('/complete');
+    .then(() => {
+      history.push({
+        pathname: '/complete',
+        state: { 
+          complete: true,
+          action: 'Register'
+        },
+      });
     })
     .catch((error) => {
       console.log(error);

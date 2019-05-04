@@ -1,21 +1,25 @@
 import React from 'react';
 import withRoot from '../withRoot';
 import Header from './Header';
-import QuestionList from './QuestionList';
-import QuestionCreatorForm from './form/QuestionCreatorForm';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import NotExistPage from './NotExistPage';
-import CompleteRegister from './CompleteRegister';
+import CompleteAction from './CompleteAction';
+import Top from './Top';
+import JavaSilverTop from './java_silver/JavaSilverTop';
+import QuestionCreatorForm from './java_silver/form/QuestionCreatorForm';
+import QuestionList from './java_silver/QuestionList';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Switch>
-        <Route path="/question" exact component={QuestionList} />
-        <Route path="/add" exact component={QuestionCreatorForm} />
+        <Route exact path="/" component={Top} />
+        <Route exact path="/java/silver" component={JavaSilverTop} />
+        <Route exact path="/java/silver/question" component={QuestionList} />
+        <Route exact path="/java/silver/add" component={QuestionCreatorForm} />
+        <Route exact path="/complete" component={CompleteAction} />
         {/* /TODO completeは/addからの遷移のみにしたい。 */}
-        <Route path="/complete" component={CompleteRegister} />
         <Route exact component={NotExistPage} />
       </Switch>
     </BrowserRouter>

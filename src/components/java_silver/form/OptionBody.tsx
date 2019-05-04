@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { TableRow, TableCell, IconButton, Tooltip } from '@material-ui/core';
 import { Edit, Delete, Check, Close } from '@material-ui/icons';
-import { OptionInfo } from '../util/types';
+import { OptionInfo } from '../../util/types';
 
 interface Props {
   index: number,

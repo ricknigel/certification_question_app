@@ -1,9 +1,12 @@
 import React, { useState, Fragment } from 'react';
-import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button } from '@material-ui/core';
-import Markdown from './util/Markdown';
-import QuestionInfo from './util/types';
+import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button, ExpansionPanelActions, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
-import { ExpandMore, Check, Close, Clear, DoneOutline } from '@material-ui/icons';
+import { ExpandMore, Check, Close, Clear, DoneOutline, Edit, Delete, Warning } from '@material-ui/icons';
+import QuestionInfo from '../util/types';
+import Markdown from '../util/Markdown';
+import { firestore } from '../../firebaseConfig';
+import * as firebase from 'firebase/app';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -19,20 +22,31 @@ const useStyles = makeStyles((theme: Theme) =>
     result: {
       textAlign: 'center',
     },
+    dialog: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    dialogText: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+    },
   }),
 );
 
 interface Props {
-  item: QuestionInfo
+  item: QuestionInfo, 
 }
 
-const Question = (props: Props) => {
-  const { item } = props;
+const Question = (props: Props & RouteComponentProps) => {
+  const { item, history } = props;
   const classes = useStyles();
   const [checked, setChecked] = useState<number[]>([]);
   const [errMessage, setErrMessage] = useState('');
   const [expand, setExpand] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [result, setResult] = useState(false);
 
   const handleSelect = (index: number) => () => {
@@ -59,8 +73,33 @@ const Question = (props: Props) => {
     checked.toString() !== correctIndex.toString() ? setResult(false) : setResult(true);
   }
 
+  const handleClose = () => {
+    setOpenDelete(false);
+  }
+
+  const deleteQuestion = () => {
+    firestore.collection('java_silver').doc(item.id).update({
+      deleteFlg: true,
+      modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then(() => {
+      console.log('successfully updated');
+      history.push({
+        pathname: '/complete',
+        state: {
+          complete: true,
+          action: 'Delete'
+        },
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
     <Paper className={classes.paper}>
+      <Typography>{item.part + '-' + item.questionNo}</Typography>
       <Markdown title={item.title} input={item.question} />
       <Typography color="error">{errMessage}</Typography>
       {item.options.map((v, i) => (
@@ -112,9 +151,41 @@ const Question = (props: Props) => {
         <ExpansionPanelDetails>
           <Markdown input={item.explanation} />
         </ExpansionPanelDetails>
+        <ExpansionPanelActions>
+          <Tooltip title="edit question">
+            <IconButton>
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="delete question">
+            <IconButton onClick={() => setOpenDelete(true)}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        </ExpansionPanelActions>
       </ExpansionPanel>
+      <Dialog open={openDelete} onClick={handleClose}>
+        <DialogTitle>
+          <div className={classes.dialog}>
+            <Typography variant="h6">Delete Question</Typography>
+            <IconButton size="small" onClick={handleClose}>
+              <Close />
+            </IconButton>
+          </div>
+        </DialogTitle>
+        <DialogContent className={classes.dialogText}>
+          <Warning color="error" />
+          <Typography color="error">
+              {'Question' + '「' + item.part + '-' + item.questionNo + '」 delete'}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={handleClose}>Cancel</Button>
+          <Button color="primary" onClick={deleteQuestion}>Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };
 
-export default Question;
+export default withRouter(Question);
