@@ -3,10 +3,11 @@ import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { withRouter } from 'react-router';
 import Markdown from '../../util/Markdown';
-import { OptionInfo, PartsSelection } from '../../util/types';
+import QuestionInfo, { OptionInfo, PartsSelection } from '../../util/types';
 import { firestore } from '../../../firebaseConfig';
+import * as H from 'history';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -36,14 +37,22 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const QuestionCreatorForm = (props: RouteComponentProps) => {
+interface Props {
+  location: H.Location<{
+    item: QuestionInfo
+  }>,
+  history: H.History
+}
+
+const QuestionEditorForm = (props: Props) => {
   const { history } = props;
-  const [part, setPart] = useState(1);
-  const [questionNo, setQuestionNo] = useState(0);
-  const [title, setTitle] = useState('');
-  const [question, setQuestion] = useState('');
-  const [explanation, setExplanation] = useState('');
-  const [options, setOptions] = useState<OptionInfo[]>([]);
+  const { item } = props.location.state;
+  const [part, setPart] = useState(item.part);
+  const [questionNo, setQuestionNo] = useState(item.questionNo);
+  const [title, setTitle] = useState(item.title);
+  const [question, setQuestion] = useState(item.question);
+  const [explanation, setExplanation] = useState(item.explanation);
+  const [options, setOptions] = useState<OptionInfo[]>(item.options);
   const [message, setMessage] = useState('');
   const classes = useStyles();
 
@@ -59,17 +68,13 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       return
     }
 
-    firestore.collection('java_silver').add({
+    firestore.collection('java_silver').doc(item.id).update({
       part: part,
       questionNo: questionNo,
       title: title,
       question: question,
       explanation: explanation,
       options: options,
-      deleteFlg: false,
-      answerTimes: 0,
-      correctTimes: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then(() => {
@@ -77,7 +82,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
         pathname: '/complete',
         state: { 
           complete: true,
-          action: 'Register'
+          action: 'Edit'
         },
       });
     })
@@ -90,7 +95,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
   return (
     <Paper className={classes.paper}>
       <Typography variant="h4">
-        Register Question
+        Editor Question
       </Typography>
       <Typography color="error">{message}</Typography>
       <form>
@@ -113,6 +118,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             required
             autoFocus
             error={questionNo !== 0 ? false : true}
+            value={questionNo}
             variant="outlined"
             onChange={e => setQuestionNo(parseInt(e.target.value))}
           />
@@ -122,6 +128,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             label="Title"
             required
             error={title ? false : true}
+            value={title}
             variant="outlined"
             onChange={e => setTitle(e.target.value)}
           />
@@ -132,6 +139,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             required
             multiline
             error={question ? false : true}
+            value={question}
             variant="outlined"
             rows="4"
             onChange={e => setQuestion(e.target.value)}
@@ -145,6 +153,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             required
             multiline
             error={explanation ? false : true}
+            value={explanation}
             variant="outlined"
             rows="4"
             onChange={e => setExplanation(e.target.value)}
@@ -166,4 +175,4 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
   );
 };
 
-export default withRouter(QuestionCreatorForm);
+export default withRouter(QuestionEditorForm);

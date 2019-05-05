@@ -4,6 +4,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Question from './Question';
 import QuestionInfo from '../util/types';
 import { firestore } from '../../firebaseConfig';
+import { match } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -23,17 +24,25 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const QuestionList = () => {
+interface Props {
+  match: match<{part: string}>
+}
+
+const QuestionList = (props: Props) => {
+  const { part } = props.match.params;
+  const PER_PAGE = 10;
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
   const [count, setCount] = useState(0);
   // useEffect内で更新しないように初期値はpageが10以下でも10とする
-  const [page, setPage] = useState(10);
+  const [page, setPage] = useState(PER_PAGE);
   const [progress, setProgress] = useState(false);
   const classes = useStyles();
-  const PER_PAGE = 10;
+  let query = part ? 
+    firestore.collection('java_silver').where('deleteFlg', '==', false).where('part', '==', parseInt(part)).orderBy('questionNo') 
+    : firestore.collection('java_silver').where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
 
   useEffect(() => {
-    firestore.collection('java_silver').where('deleteFlg', '==', false).get()
+    query.get()
     .then((resp) => {
       setCount(resp.size);
     })
@@ -43,7 +52,6 @@ const QuestionList = () => {
   }, [setCount]);
 
   useEffect(() => {
-    let query = firestore.collection('java_silver').where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
 
     if (page > PER_PAGE) {
       const lastArray = questionList[questionList.length - 1];
@@ -79,21 +87,20 @@ const QuestionList = () => {
 
   return (
     <main className={classes.content}>
-      {progress ? 
+      { progress ? 
         <div>
+          { questionList.length !== 0 ?
           <Paper>
             {questionList.map(item => (
               <Question key={item.id} item={item} />
             ))}
-          </Paper>
+          </Paper> : <p>Nothing Register Question</p> }
           { count >= PER_PAGE && page !== count &&
             <Fab variant="extended" onClick={handleLoadQuestion}>
               { progress ? 'More Question' : <CircularProgress /> }
-            </Fab>
-          }
+            </Fab> }
         </div>
-        : <CircularProgress />
-      }
+        : <CircularProgress /> }
     </main>
   );
 };

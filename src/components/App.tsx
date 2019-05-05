@@ -8,6 +8,7 @@ import Top from './Top';
 import JavaSilverTop from './java_silver/JavaSilverTop';
 import QuestionCreatorForm from './java_silver/form/QuestionCreatorForm';
 import QuestionList from './java_silver/QuestionList';
+import QuestionEditorForm from './java_silver/form/QuestionEditorForm';
 
 const App = () => {
   return (
@@ -17,9 +18,10 @@ const App = () => {
         <Route exact path="/" component={Top} />
         <Route exact path="/java/silver" component={JavaSilverTop} />
         <Route exact path="/java/silver/question" component={QuestionList} />
+        <Route exact path="/java/silver/question/:part" component={QuestionList} />
         <Route exact path="/java/silver/add" component={QuestionCreatorForm} />
+        <Route exact path="/java/silver/:id/edit" component={QuestionEditorForm} />
         <Route exact path="/complete" component={CompleteAction} />
-        {/* /TODO completeは/addからの遷移のみにしたい。 */}
         <Route exact component={NotExistPage} />
       </Switch>
     </BrowserRouter>

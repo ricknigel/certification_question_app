@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       marginBottom: theme.spacing(3),
+      padding: theme.spacing(2),
     },
     button: {
       marginRight: theme.spacing(2),
@@ -77,6 +78,15 @@ const Question = (props: Props & RouteComponentProps) => {
     setOpenDelete(false);
   }
 
+  const editorQuestion = () => {
+    history.push({
+      pathname: '/java/silver/' + item.id + '/edit',
+      state: {
+        item: item
+      }
+    });
+  }
+
   const deleteQuestion = () => {
     firestore.collection('java_silver').doc(item.id).update({
       deleteFlg: true,
@@ -94,7 +104,7 @@ const Question = (props: Props & RouteComponentProps) => {
     })
     .catch((err) => {
       console.log(err);
-    })
+    });
   }
 
   return (
@@ -153,7 +163,7 @@ const Question = (props: Props & RouteComponentProps) => {
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Tooltip title="edit question">
-            <IconButton>
+            <IconButton onClick={editorQuestion}>
               <Edit />
             </IconButton>
           </Tooltip>

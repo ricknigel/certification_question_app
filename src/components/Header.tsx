@@ -33,6 +33,7 @@ const Header = () => {
               </IconButton>
             </Link>
           </Tooltip>
+          Certification Question
         </Typography>
         <Typography variant="h6">
           <Tooltip title="Register Question">
