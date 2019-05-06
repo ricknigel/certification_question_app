@@ -5,7 +5,7 @@ import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Markdown from '../../util/Markdown';
-import { OptionInfo, PartsSelection } from '../../util/types';
+import { OptionInfo, JavaParts } from '../../util/types';
 import { firestore } from '../../../firebaseConfig';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -101,7 +101,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
             onChange={e => setPart(parseInt(e.target.value))}
             input={<OutlinedInput labelWidth={100} />}
           >
-            {PartsSelection.map((value, index) => (
+            {JavaParts.map((value, index) => (
               <MenuItem key={index} value={value.part}>{value.name}</MenuItem>
             ))}
           </Select>

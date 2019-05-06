@@ -5,7 +5,7 @@ import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter } from 'react-router';
 import Markdown from '../../util/Markdown';
-import QuestionInfo, { OptionInfo, PartsSelection } from '../../util/types';
+import QuestionInfo, { OptionInfo, JavaParts } from '../../util/types';
 import { firestore } from '../../../firebaseConfig';
 import * as H from 'history';
 
@@ -106,7 +106,7 @@ const QuestionEditorForm = (props: Props) => {
             onChange={e => setPart(parseInt(e.target.value))}
             input={<OutlinedInput labelWidth={100} />}
           >
-            {PartsSelection.map((value, index) => (
+            {JavaParts.map((value, index) => (
               <MenuItem key={index} value={value.part}>{value.name}</MenuItem>
             ))}
           </Select>

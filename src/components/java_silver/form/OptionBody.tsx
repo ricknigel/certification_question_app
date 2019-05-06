@@ -15,7 +15,7 @@ const OptionBody = memo((props: Props) => {
   return (
     <TableRow>
       <TableCell>
-        <Tooltip title="Edit">
+        <Tooltip title="Edit Option">
           <IconButton 
             size="small"
             onClick={() => editOption(index)}

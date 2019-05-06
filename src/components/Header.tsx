@@ -2,11 +2,23 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, IconButton, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { createStyles } from '@material-ui/styles';
-import { AddCircle, Home } from '@material-ui/icons';
+import { AddCircle, Home, Menu } from '@material-ui/icons';
+import { drawerWidth } from './util/types';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    nav: {
+    appbar: {
+      marginLeft: drawerWidth,
+      [theme.breakpoints.up('sm')]: {
+        width: `calc(100% - ${drawerWidth}px)`,
+      },
+    },
+    menuBtn: {
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+    },
+    grow: {
       flexGrow: 1
     },
     link: {
@@ -19,13 +31,24 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Header = () => {
-  const classes = useStyles();
+interface Props {
+  onOpen: () => void
+}
 
+const Header = (props: Props) => {
+  const { onOpen } = props;
+  const classes = useStyles();
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" className={classes.appbar}>
       <Toolbar>
-        <Typography className={classes.nav} variant="h6">
+        <Typography variant="h6">
+          <IconButton 
+            color="inherit"
+            className={classes.menuBtn}
+            onClick={onOpen}
+          >
+            <Menu />
+          </IconButton>
           <Tooltip title="home">
             <Link className={classes.link} to="/">
               <IconButton color="inherit">
@@ -33,8 +56,11 @@ const Header = () => {
               </IconButton>
             </Link>
           </Tooltip>
+        </Typography>
+        <Typography noWrap variant="h6">
           Certification Question
         </Typography>
+        <div className={classes.grow}></div>
         <Typography variant="h6">
           <Tooltip title="Register Question">
             <Link className={classes.link} to="/java/silver/add">

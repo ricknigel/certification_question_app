@@ -1,9 +1,4 @@
 
-export interface OptionInfo {
-  optionName: string,
-  isAnswer: boolean
-}
-
 export default interface QuestionInfo {
   id: string,
   part: number,
@@ -15,7 +10,12 @@ export default interface QuestionInfo {
   modifiedAt: string
 }
 
-export const PartsSelection = [
+export interface OptionInfo {
+  optionName: string,
+  isAnswer: boolean
+}
+
+export const JavaParts = [
   { part: 1, name: '第1章 Javaの基本' },
   { part: 2, name: '第2章 Javaのデータ型の操作' },
   { part: 3, name: '第3章 演算子と判定構造の使用' },
@@ -29,3 +29,10 @@ export const PartsSelection = [
   { part: 11, name: '第11章 総仕上げ問題2' },
   { part: 12, name: 'その他' }
 ]
+
+export const CertificationSubject = [
+  { subId: 1, name: 'Java Silver', children: JavaParts },
+  // { subId: 2, name: 'AP 応用情報技術者', children: undefined },
+]
+
+export const drawerWidth = 240

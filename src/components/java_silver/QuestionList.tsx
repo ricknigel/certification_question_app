@@ -42,6 +42,10 @@ const QuestionList = (props: Props) => {
     : firestore.collection('java_silver').where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
 
   useEffect(() => {
+    // initialize
+    setPage(PER_PAGE);
+    setQuestionList([]);
+
     query.get()
     .then((resp) => {
       setCount(resp.size);
@@ -49,13 +53,14 @@ const QuestionList = (props: Props) => {
     .catch((err) => {
       console.log(err);
     });
-  }, [setCount]);
+  }, [part, setCount]);
 
   useEffect(() => {
-
     if (page > PER_PAGE) {
       const lastArray = questionList[questionList.length - 1];
-      query = query.startAfter(lastArray.part, lastArray.questionNo);
+      query = part ? query.startAfter(lastArray.questionNo) : query.startAfter(lastArray.part, lastArray.questionNo);
+    } else {
+      setProgress(false);
     }
 
     query.limit(PER_PAGE).get()
@@ -76,9 +81,9 @@ const QuestionList = (props: Props) => {
       setProgress(true);
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err); 
     });
-  }, [page, setQuestionList]);
+  }, [part, page, setQuestionList]);
 
   const handleLoadQuestion = () => {
     const newPage = count - page > PER_PAGE ? page + PER_PAGE : count;
@@ -86,7 +91,7 @@ const QuestionList = (props: Props) => {
   };
 
   return (
-    <main className={classes.content}>
+    <div className={classes.content}>
       { progress ? 
         <div>
           { questionList.length !== 0 ?
@@ -101,7 +106,7 @@ const QuestionList = (props: Props) => {
             </Fab> }
         </div>
         : <CircularProgress /> }
-    </main>
+    </div>
   );
 };
 
