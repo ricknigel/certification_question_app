@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Paper, Fab } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Question from './Question';
-import QuestionInfo, { PER_PAGE } from '../util/types';
+import QuestionInfo from '../util/types';
 import { firestore } from '../../firebaseConfig';
 import { match } from 'react-router';
 
@@ -36,8 +36,9 @@ interface Props {
   match: match<{part: string}>
 }
 
-const QuestionList = (props: Props) => {
+const PartQuestionList = (props: Props) => {
   const { part } = props.match.params;
+  const PER_PAGE = 10;
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
   const [count, setCount] = useState(0);
   // useEffect内で更新しないように初期値はpageが10以下でも10とする
@@ -45,13 +46,10 @@ const QuestionList = (props: Props) => {
   const [progress, setProgress] = useState(false);
   const [morePro, setMorePro] = useState(false);
   const classes = useStyles();
-  let query = part ? 
-    firestore.collection('java_silver').where('deleteFlg', '==', false).where('part', '==', parseInt(part)).orderBy('questionNo') 
-    : firestore.collection('java_silver').where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
+  const query = firestore.collection('java_silver').where('deleteFlg', '==', false).where('part', '==', parseInt(part)).orderBy('questionNo');
 
   useEffect(() => {
     setProgress(false);
-
     // initialize
     setPage(PER_PAGE);
     setQuestionList([]);
@@ -68,12 +66,12 @@ const QuestionList = (props: Props) => {
   }, [part, setQuestionList, setCount]);
 
   const handleLoadQuestion = () => {
-    setMorePro(false);
     const newPage = count - page > PER_PAGE ? page + PER_PAGE : count;
+    setMorePro(false);
     setPage(newPage);
     const lastArray = questionList[questionList.length - 1];
 
-    part ? getQuestion(query.startAfter(lastArray.questionNo)) : getQuestion(query.startAfter(lastArray.part, lastArray.questionNo));
+    getQuestion(query.startAfter(lastArray.questionNo));
   };
 
   const getQuestion = (argQuery: firebase.firestore.Query) => {
@@ -112,7 +110,7 @@ const QuestionList = (props: Props) => {
           </Paper> : <p>Nothing Register Question</p> }
           { count >= PER_PAGE && page !== count &&
             <Fab 
-              className={classes.moreButton} 
+              className={classes.moreButton}
               variant="extended" 
               onClick={handleLoadQuestion}
             >
@@ -124,4 +122,4 @@ const QuestionList = (props: Props) => {
   );
 };
 
-export default QuestionList;
+export default PartQuestionList;

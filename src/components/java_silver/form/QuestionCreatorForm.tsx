@@ -5,7 +5,7 @@ import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Markdown from '../../util/Markdown';
-import { OptionInfo, JavaParts } from '../../util/types';
+import { OptionInfo, JavaParts, generateRandom } from '../../util/types';
 import { firestore } from '../../../firebaseConfig';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -69,6 +69,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       deleteFlg: false,
       answerTimes: 0,
       correctTimes: 0,
+      random: generateRandom(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })

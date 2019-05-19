@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, Theme, Divider, List, ListItem, ListItemText, Typography, Collapse } from '@material-ui/core';
+import { makeStyles, Theme, Divider, List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import { CertificationSubject, drawerWidth } from './util/types';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,13 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawer: {
       width: drawerWidth,
+    },
+    link: {
+      textDecoration: 'none',
+      color: theme.palette.grey[800],
+    },
+    nasted: {
+      paddingLeft: theme.spacing(4),
     },
   }),
 );
@@ -24,7 +31,6 @@ const MyDrawerContent = (props: Props) => {
   return (
     <div>
       <div className={classes.toolbar}>
-        <Typography>Drawer</Typography>
       </div>
       <Divider />
       {CertificationSubject.map((v) => (
@@ -35,9 +41,22 @@ const MyDrawerContent = (props: Props) => {
             </ListItemText>
           </ListItem> 
           <Collapse in={menuOpen} unmountOnExit>
+            <Link to={'/java/silver/randomQuestion'} className={classes.link}>
+              <ListItem button className={classes.nasted} onClick={onClose}>
+                {'ランダム問題'}
+              </ListItem>
+            </Link>
             {v.children.map((v) => (
-              <Link key={v.part} to={'/java/silver/question/' + v.part}>
-                <ListItem button onClick={onClose}>
+              <Link 
+                key={v.part}
+                to={'/java/silver/question/' + v.part}
+                className={classes.link}
+              >
+                <ListItem  
+                  button 
+                  className={classes.nasted}
+                  onClick={onClose} 
+                >
                   {v.name}
                 </ListItem>
               </Link>

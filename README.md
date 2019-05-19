@@ -8,3 +8,5 @@ firebase-react-app
 * サイトデザイン
 * unmount時の処理
 * more question時のloading処理
+* count処理の見直し
+* randomのquery切り替え

@@ -35,4 +35,17 @@ export const CertificationSubject = [
   // { subId: 2, name: 'AP 応用情報技術者', children: undefined },
 ]
 
-export const drawerWidth = 240
+export const drawerWidth = 240;
+
+// page number
+export const PER_PAGE = 10;
+
+// generate random max and min
+// 32bit int range
+export const MIN = -2147483648;
+export const MAX = 2147483647;
+
+
+export const generateRandom = (): number => {
+  return Math.floor(Math.random() * (MAX - MIN + 1) + MIN);
+}

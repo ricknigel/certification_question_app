@@ -58,7 +58,7 @@ const Header = (props: Props) => {
           </Tooltip>
         </Typography>
         <Typography noWrap variant="h6">
-          Certification Question
+          CerQue
         </Typography>
         <div className={classes.grow}></div>
         <Typography variant="h6">
