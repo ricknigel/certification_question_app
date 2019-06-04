@@ -7,6 +7,6 @@ firebase-react-app
 * エラー処理
 * サイトデザイン
 * unmount時の処理
-* more question時のloading処理
 * count処理の見直し
-* randomのquery切り替え
+* randomで10問以下の場合の処理
+* 問題の表示アニメーション

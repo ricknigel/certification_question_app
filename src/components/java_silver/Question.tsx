@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button, ExpansionPanelActions, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
-import { ExpandMore, Check, Close, Clear, DoneOutline, Edit, Delete, Warning } from '@material-ui/icons';
+import { ExpandMore, Check, Close, Clear, DoneOutline, Edit, Delete, Warning, Favorite } from '@material-ui/icons';
 import QuestionInfo from '../util/types';
 import Markdown from '../util/Markdown';
 import { firestore } from '../../firebaseConfig';
@@ -162,6 +162,14 @@ const Question = (props: Props & RouteComponentProps) => {
           <Markdown input={item.explanation} />
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
+          {/* TODO: fav */}
+          <Tooltip title="favorite">
+            <IconButton>
+              {item.favorite 
+                ? <Favorite color="error" />
+                : <Favorite /> }
+            </IconButton>
+          </Tooltip>
           <Tooltip title="edit question">
             <IconButton onClick={editorQuestion}>
               <Edit />

@@ -70,6 +70,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       answerTimes: 0,
       correctTimes: 0,
       random: generateRandom(),
+      favorite: true, // TODO: 今だけtrue 追加完了後にfalseに要修正
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })

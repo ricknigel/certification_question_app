@@ -7,7 +7,10 @@ export default interface QuestionInfo {
   question: string,
   explanation: string,
   options: OptionInfo[],
-  modifiedAt: string
+  modifiedAt: string,
+  answerTimes: number,
+  correctTimes: number,
+  favorite: boolean,
 }
 
 export interface OptionInfo {

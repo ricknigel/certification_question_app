@@ -43,7 +43,7 @@ const MyDrawerContent = (props: Props) => {
           <Collapse in={menuOpen} unmountOnExit>
             <Link to={'/java/silver/randomQuestion'} className={classes.link}>
               <ListItem button className={classes.nasted} onClick={onClose}>
-                {'ランダム問題'}
+                {'Random Question'}
               </ListItem>
             </Link>
             {v.children.map((v) => (

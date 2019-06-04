@@ -13,6 +13,7 @@ import { createStyles } from '@material-ui/styles';
 import { drawerWidth } from './util/types';
 import AppFrame from './AppFrame';
 import RandomQuestionList from './java_silver/RandomQuestionList';
+import IssueList from './IssueList';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -46,6 +47,7 @@ const App = () => {
             <Route exact path="/java/silver/add" component={QuestionCreatorForm} />
             <Route exact path="/java/silver/:id/edit" component={QuestionEditorForm} />
             <Route exact path="/complete" component={CompleteAction} />
+            <Route exact path="/issue" component={IssueList} />
             <Route exact component={NotExistPage} />
           </Switch>
         </main>

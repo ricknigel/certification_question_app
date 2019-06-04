@@ -36,50 +36,83 @@ const RandomQuestionList = () => {
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
   const [progress, setProgress] = useState(false);
   const [morePro, setMorePro] = useState(false);
-  const query = firestore.collection('java_silver').orderBy('random', 'asc');
-
-  const getQuestion = (argQuery: firebase.firestore.Query) => {
-    argQuery.limit(PER_PAGE).get()
-    .then((resp) => {
-      resp.forEach((doc) => {
-        const addQuestion: QuestionInfo = {
-          id: doc.id,
-          part: doc.get('part'),
-          questionNo: doc.get('questionNo'),
-          title: doc.get('title'),
-          question: doc.get('question'),
-          explanation: doc.get('explanation'),
-          options: doc.get('options'),
-          modifiedAt: doc.get('modifiedAt'),
-        }
-        setQuestionList((prev) => [...prev, addQuestion]);
-      });
-      setProgress(true);
-      setMorePro(true);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+  const query = firestore.collection('java_silver');
 
   useEffect(() => {
     setProgress(false);
-    getQuestion(query.startAt(generateRandom()));
+    getQuestion(makeSortQuery())
+    .then((result) => {
+      setProgress(true);
+      setMorePro(true);
+    })
+    .catch((err) => console.log(err));
   }, [setQuestionList]);
 
-  const bo = Math.floor(Math.random() * 2);
+  useEffect(() => {
+    questionList.length !== 0 && updateRandom();
+  }, [questionList]);
 
   const handleLoadQuestion = () => {
     setMorePro(false);
+    setQuestionList([]);
+    getQuestion(makeSortQuery())
+    .then((result) => {
+      setProgress(true);
+      setMorePro(true);
+    })
+    .catch((err) => console.log(err));
+  }
 
+  const getQuestion = (argQuery: firebase.firestore.Query) => {
+    return new Promise((resolve) => {
+      argQuery.limit(PER_PAGE).get()
+      .then((resp) => {
+        let addQuestionList: QuestionInfo[] = [];
+        resp.forEach((doc) => {
+          const addQuestion: QuestionInfo = {
+            id: doc.id,
+            part: doc.get('part'),
+            questionNo: doc.get('questionNo'),
+            title: doc.get('title'),
+            question: doc.get('question'),
+            explanation: doc.get('explanation'),
+            options: doc.get('options'),
+            modifiedAt: doc.get('modifiedAt'),
+            answerTimes: doc.get('answerTimes'),
+            correctTimes: doc.get('correctTimes'),
+            favorite: doc.get('favorite')
+          }
+          addQuestionList.push(addQuestion);
+        });
+        setQuestionList(() => addQuestionList);
+        resolve(resp.size);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    })
+  }
+
+  const makeSortQuery = () => {
+    let sortQuery = getZeroOrOne() === 0 ? query.orderBy('random', 'asc') : query.orderBy('random', 'desc');
+    sortQuery = getZeroOrOne() === 0 ? sortQuery.startAt(generateRandom()) : sortQuery.endAt(generateRandom());
+
+    return sortQuery;
+  }
+
+  const getZeroOrOne = () => {
+    return Math.floor(Math.random() * 2);
+  }
+
+  const updateRandom = () => {
     questionList.map(item => (
-      firestore.collection('java_silver').doc(item.id).update({
+      query.doc(item.id).update({
         random: generateRandom()
       })
+      .catch((err) => {
+        console.log(err);
+      })
     ));
-
-    setQuestionList([]);
-    getQuestion(query.endAt(generateRandom()));
   }
 
   return (

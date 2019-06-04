@@ -87,6 +87,9 @@ const PartQuestionList = (props: Props) => {
           explanation: doc.get('explanation'),
           options: doc.get('options'),
           modifiedAt: doc.get('modifiedAt'),
+          answerTimes: doc.get('answerTimes'),
+          correctTimes: doc.get('correctTimes'),
+          favorite: doc.get('favorite')
         }
         setQuestionList((prev) => [...prev, addQuestion]);
       });

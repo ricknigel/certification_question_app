@@ -7,7 +7,7 @@ const JavaSilverTop = () => {
   return (
       <div>
         <Card>
-          <Link to="/java/silver/question">Question List</Link>
+          <Link to="/java/silver/randomQuestion">Random Question List</Link>
         </Card>
         {JavaParts.map(v => 
           <Card key={v.part}>
