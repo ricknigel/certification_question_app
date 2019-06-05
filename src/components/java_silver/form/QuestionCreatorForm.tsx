@@ -5,8 +5,7 @@ import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Markdown from '../../util/Markdown';
-import { OptionInfo, JavaParts, generateRandom } from '../../util/types';
-import { firestore } from '../../../firebaseConfig';
+import { OptionInfo, JavaParts, generateRandom, javaQuery } from '../../util/types';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -59,7 +58,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       return
     }
 
-    firestore.collection('java_silver').add({
+    javaQuery.add({
       part: part,
       questionNo: questionNo,
       title: title,

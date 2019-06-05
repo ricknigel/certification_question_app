@@ -9,4 +9,9 @@ firebase-react-app
 * unmount時の処理
 * count処理の見直し
 * randomで10問以下の場合の処理
-* 問題の表示アニメーション
+* issueList
+* favorite フィルタ
+* 回答正解率
+* 認証認証
+* 検索機能
+* 分析

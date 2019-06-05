@@ -5,8 +5,7 @@ import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter } from 'react-router';
 import Markdown from '../../util/Markdown';
-import QuestionInfo, { OptionInfo, JavaParts } from '../../util/types';
-import { firestore } from '../../../firebaseConfig';
+import QuestionInfo, { OptionInfo, JavaParts, javaQuery } from '../../util/types';
 import * as H from 'history';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -68,7 +67,7 @@ const QuestionEditorForm = (props: Props) => {
       return
     }
 
-    firestore.collection('java_silver').doc(item.id).update({
+    javaQuery.doc(item.id).update({
       part: part,
       questionNo: questionNo,
       title: title,

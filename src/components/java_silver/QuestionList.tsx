@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { CircularProgress, Paper, Fab } from '@material-ui/core';
+import React, { useEffect, useState, Fragment } from 'react';
+import { CircularProgress, Fab } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Question from './Question';
-import QuestionInfo, { PER_PAGE } from '../util/types';
-import { firestore } from '../../firebaseConfig';
+import QuestionInfo, { PER_PAGE, javaQuery } from '../util/types';
 import { match } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -46,8 +45,8 @@ const QuestionList = (props: Props) => {
   const [morePro, setMorePro] = useState(false);
   const classes = useStyles();
   let query = part ? 
-    firestore.collection('java_silver').where('deleteFlg', '==', false).where('part', '==', parseInt(part)).orderBy('questionNo') 
-    : firestore.collection('java_silver').where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
+    javaQuery.where('deleteFlg', '==', false).where('part', '==', parseInt(part)).orderBy('questionNo') 
+    : javaQuery.where('deleteFlg', '==', false).orderBy('part').orderBy('questionNo');
 
   useEffect(() => {
     setProgress(false);
@@ -56,6 +55,7 @@ const QuestionList = (props: Props) => {
     setPage(PER_PAGE);
     setQuestionList([]);
 
+    // countいらないかも
     query.get()
     .then((resp) => {
       setCount(resp.size);
@@ -108,11 +108,11 @@ const QuestionList = (props: Props) => {
       { progress ? 
         <div className={classes.flex}>
           { questionList.length !== 0 ?
-          <Paper>
+          <Fragment>
             {questionList.map(item => (
               <Question key={item.id} item={item} />
             ))}
-          </Paper> : <p>Nothing Register Question</p> }
+          </Fragment> : <p>Nothing Register Question</p> }
           { count >= PER_PAGE && page !== count &&
             <Fab 
               className={classes.moreButton} 

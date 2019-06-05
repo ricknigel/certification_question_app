@@ -1,3 +1,4 @@
+import { firestore } from "../../firebaseConfig";
 
 export default interface QuestionInfo {
   id: string,
@@ -52,3 +53,5 @@ export const MAX = 2147483647;
 export const generateRandom = (): number => {
   return Math.floor(Math.random() * (MAX - MIN + 1) + MIN);
 }
+
+export const javaQuery = firestore.collection('java_silver');

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, CircularProgress, Paper, Fab } from '@material-ui/core';
+import { makeStyles, Theme, CircularProgress, Fab } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
-import { firestore } from '../../firebaseConfig';
-import QuestionInfo, { generateRandom, PER_PAGE } from '../util/types';
+import QuestionInfo, { generateRandom, PER_PAGE, javaQuery } from '../util/types';
 import Question from './Question';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -36,12 +35,11 @@ const RandomQuestionList = () => {
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
   const [progress, setProgress] = useState(false);
   const [morePro, setMorePro] = useState(false);
-  const query = firestore.collection('java_silver');
 
   useEffect(() => {
     setProgress(false);
     getQuestion(makeSortQuery())
-    .then((result) => {
+    .then(() => {
       setProgress(true);
       setMorePro(true);
     })
@@ -56,7 +54,7 @@ const RandomQuestionList = () => {
     setMorePro(false);
     setQuestionList([]);
     getQuestion(makeSortQuery())
-    .then((result) => {
+    .then(() => {
       setProgress(true);
       setMorePro(true);
     })
@@ -94,7 +92,7 @@ const RandomQuestionList = () => {
   }
 
   const makeSortQuery = () => {
-    let sortQuery = getZeroOrOne() === 0 ? query.orderBy('random', 'asc') : query.orderBy('random', 'desc');
+    let sortQuery = getZeroOrOne() === 0 ? javaQuery.orderBy('random', 'asc') : javaQuery.orderBy('random', 'desc');
     sortQuery = getZeroOrOne() === 0 ? sortQuery.startAt(generateRandom()) : sortQuery.endAt(generateRandom());
 
     return sortQuery;
@@ -106,7 +104,7 @@ const RandomQuestionList = () => {
 
   const updateRandom = () => {
     questionList.map(item => (
-      query.doc(item.id).update({
+      javaQuery.doc(item.id).update({
         random: generateRandom()
       })
       .catch((err) => {
@@ -119,11 +117,9 @@ const RandomQuestionList = () => {
     <div className={classes.content}>
       { progress ? 
         <div className={classes.flex}>
-          <Paper>
-            {questionList.map(item => (
-              <Question key={item.id} item={item} />
-            ))}
-          </Paper>
+          {questionList.map(item => (
+            <Question key={item.id} item={item} />
+          ))}
           <Fab 
             className={classes.moreButton}
             variant="extended"
