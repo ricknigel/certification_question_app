@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput } from '@material-ui/core';
+import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput, FormControlLabel, Checkbox } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 import Markdown from '../../util/Markdown';
 import QuestionInfo, { OptionInfo, JavaParts, javaQuery } from '../../util/types';
 import * as H from 'history';
+import { FavoriteBorder, Favorite } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     sendButton: {
       marginTop: theme.spacing(3),
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
     },
   }),
 );
@@ -52,10 +53,10 @@ const QuestionEditorForm = (props: Props) => {
   const [question, setQuestion] = useState(item.question);
   const [explanation, setExplanation] = useState(item.explanation);
   const [options, setOptions] = useState<OptionInfo[]>(item.options);
+  const [favorite, setFavorite] = useState(item.favorite);
   const [message, setMessage] = useState('');
   const classes = useStyles();
 
-  // TODO [...prev, add]に修正必要?
   const addOptions = useCallback((add: OptionInfo[]) => {
     setOptions(() => [...add]);
   }, [setOptions]);
@@ -74,6 +75,7 @@ const QuestionEditorForm = (props: Props) => {
       question: question,
       explanation: explanation,
       options: options,
+      favorite: favorite,
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then(() => {
@@ -160,6 +162,10 @@ const QuestionEditorForm = (props: Props) => {
         </FormControl>
         { explanation && <Markdown title="Explanation Preview" input={explanation} />}
         <div className={classes.sendButton}>
+          <FormControlLabel
+            control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite color="error" />} onClick={() => setFavorite(!favorite)} checked={favorite} />}
+            label="Favorite"
+          />
           <Button 
             size="large" 
             color="primary" 

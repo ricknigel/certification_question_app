@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
     result: {
       textAlign: 'center',
     },
+    detail: {
+      overflow: 'auto',
+    },
     dialog: {
       display: 'flex',
       flexDirection: 'row',
@@ -75,12 +78,11 @@ const Question = (props: Props & RouteComponentProps) => {
       answerTimes: item.answerTimes + 1,
       correctTimes: res ? item.correctTimes : item.correctTimes + 1
     })
-    .then(() => {
-      res ? setResult(false) : setResult(true); 
-      setExpand(true);
-      setOpenAnswer(true);
-    })
     .catch((err) => console.log(err));
+
+    res ? setResult(false) : setResult(true); 
+    setExpand(true);
+    setOpenAnswer(true);
   }
 
   const handleClose = () => {
@@ -176,7 +178,7 @@ const Question = (props: Props & RouteComponentProps) => {
           >
             Explanation
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          <ExpansionPanelDetails className={classes.detail}>
             <Markdown input={item.explanation} />
           </ExpansionPanelDetails>
           <ExpansionPanelActions>

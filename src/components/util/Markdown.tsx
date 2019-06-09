@@ -1,7 +1,26 @@
 import React, { Fragment, useEffect } from 'react';
 import marked from 'marked';
-import { Typography, Divider } from '@material-ui/core';
-const hljs = require('highlight.js');
+import hljs from 'highlight.js';
+import { Typography, Divider, makeStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => 
+  createStyles({
+    mark: {
+      '& pre': {
+        padding: '12px 18px',
+        backgroundColor: theme.palette.grey[100],
+        overflow: 'auto',
+        borderRadius: theme.shape.borderRadius,
+        WebkitOverflowScrolling: 'touch',
+      },
+      '& code': {
+        fontSize: 12,
+        fontFamily: 'Menlo, Consolas, "DejaVu Sans Mono"',
+      },
+    },
+  }),
+);
 
 interface Props {
   input: string
@@ -12,11 +31,21 @@ interface Props {
 // TODO: want not to use dangerouslySetInnerHTML Markdown
 const Markdown = (props: Props) => {
   const { input, title } = props;
+  const classes = useStyles();
   useEffect(() => {
+    const renderer = new marked.Renderer();
+    renderer.code = function(code, language) {
+      return '<pre' + '><code class="line-numbers">' + code + '</code></pre>'; 
+    };
     marked.setOptions({
-      highlight: function(code, lang) {
-        return hljs.highlightAuto(code, [lang]).value;
-      }
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false,
+      renderer: renderer,
     });
   }, []);
 
@@ -25,6 +54,7 @@ const Markdown = (props: Props) => {
       <Typography variant="h6">{title}</Typography>
       <Divider />
       <div 
+        className={classes.mark}
         dangerouslySetInnerHTML={{__html: marked(input)}}
       ></div>
     </Fragment>

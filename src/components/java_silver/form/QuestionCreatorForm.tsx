@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput } from '@material-ui/core';
+import { Paper, Typography, FormControl, TextField, Button, InputLabel, Select, MenuItem, OutlinedInput, FormControlLabel, Checkbox } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import * as firebase from 'firebase/app';
 import OptionList from './OptionList';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Markdown from '../../util/Markdown';
 import { OptionInfo, JavaParts, generateRandom, javaQuery } from '../../util/types';
+import { FavoriteBorder, Favorite } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     sendButton: {
       marginTop: theme.spacing(3),
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
     },
   }),
 );
@@ -43,10 +44,10 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
   const [question, setQuestion] = useState('');
   const [explanation, setExplanation] = useState('');
   const [options, setOptions] = useState<OptionInfo[]>([]);
+  const [favorite, setFavorite] = useState(false);
   const [message, setMessage] = useState('');
   const classes = useStyles();
 
-  // TODO [...prev, add]に修正必要?
   const addOptions = useCallback((add: OptionInfo[]) => {
     setOptions(() => [...add]);
   }, [setOptions]);
@@ -69,7 +70,7 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
       answerTimes: 0,
       correctTimes: 0,
       random: generateRandom(),
-      favorite: true, // TODO: 今だけtrue 追加完了後にfalseに要修正
+      favorite: favorite,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
@@ -153,6 +154,10 @@ const QuestionCreatorForm = (props: RouteComponentProps) => {
         </FormControl>
         { explanation && <Markdown title="Explanation Preview" input={explanation} />}
         <div className={classes.sendButton}>
+          <FormControlLabel
+            control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite color="error" />} onClick={() => setFavorite(!favorite)} checked={favorite} />}
+            label="Favorite"
+          />
           <Button 
             size="large" 
             color="primary" 
