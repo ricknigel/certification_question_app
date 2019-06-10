@@ -9,7 +9,6 @@ firebase-react-app
 * エラー処理
 * サイトデザイン
 * unmount時の処理
-* count処理の見直し
 * randomで10問以下の場合の処理
 * issueList
 * favorite フィルタ

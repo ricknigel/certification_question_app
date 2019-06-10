@@ -38,9 +38,7 @@ interface Props {
 const QuestionList = (props: Props) => {
   const { part } = props.match.params;
   const [questionList, setQuestionList] = useState<QuestionInfo[]>([]);
-  const [count, setCount] = useState(0);
-  // useEffect内で更新しないように初期値はpageが10以下でも10とする
-  const [page, setPage] = useState(PER_PAGE);
+  const [page, setPage] = useState(0);
   const [progress, setProgress] = useState(false);
   const [morePro, setMorePro] = useState(false);
   const classes = useStyles();
@@ -52,25 +50,14 @@ const QuestionList = (props: Props) => {
     setProgress(false);
 
     // initialize
-    setPage(PER_PAGE);
+    setPage(0);
     setQuestionList([]);
 
-    // countいらないかも
-    query.get()
-    .then((resp) => {
-      setCount(resp.size);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
     getQuestion(query);
-  }, [part, setQuestionList, setCount]);
+  }, [part, setQuestionList]);
 
   const handleLoadQuestion = () => {
     setMorePro(false);
-    const newPage = count - page > PER_PAGE ? page + PER_PAGE : count;
-    setPage(newPage);
     const lastArray = questionList[questionList.length - 1];
 
     part ? getQuestion(query.startAfter(lastArray.questionNo)) : getQuestion(query.startAfter(lastArray.part, lastArray.questionNo));
@@ -95,6 +82,7 @@ const QuestionList = (props: Props) => {
         }
         setQuestionList((prev) => [...prev, addQuestion]);
       });
+      setPage(resp.size);
       setProgress(true);
       setMorePro(true);
     })
@@ -113,7 +101,7 @@ const QuestionList = (props: Props) => {
               <Question key={item.id} item={item} />
             ))}
           </Fragment> : <p>Nothing Register Question</p> }
-          { count >= PER_PAGE && page !== count &&
+          { page == PER_PAGE && 
             <Fab 
               className={classes.moreButton} 
               variant="extended" 

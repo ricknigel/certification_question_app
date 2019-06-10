@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'flex-end',
     },
+    optionText: {
+      wordBreak: 'break-all',
+    },
     result: {
       textAlign: 'center',
     },
@@ -138,7 +141,7 @@ const Question = (props: Props & RouteComponentProps) => {
               <Checkbox checked={checked.indexOf(i) !== -1} />
             </ListItemIcon>
             <Typography variant="h6">{i + 1}</Typography>
-            <ListItemText primary={v.optionName} />
+            <ListItemText primary={v.optionName} className={classes.optionText} />
             <ListItemIcon>
               { openAnswer ? v.isAnswer ? <Check color="secondary" /> : <Close color="error" /> : <></>}
             </ListItemIcon>

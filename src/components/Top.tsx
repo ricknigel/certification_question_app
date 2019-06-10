@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, makeStyles, Theme, Card, CardContent, Grid } from '@material-ui/core';
+import { Typography, makeStyles, Theme, CardContent, Grid } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -30,8 +30,10 @@ const Top = () => {
           </CardContent>
         </Grid>
         <Grid>
-          <Typography><a href="https://github.com/rick-mo/certification_question_app" target="_blank">github</a></Typography>
-          <Typography><Link to="/issue">Issue List</Link></Typography>
+          <CardContent>
+            <Typography><a href="https://github.com/rick-mo/certification_question_app" target="_blank">github</a></Typography>
+            <Typography><Link to="/issue">Issue List</Link></Typography>
+          </CardContent>
         </Grid>
       </Grid>
     </div>
