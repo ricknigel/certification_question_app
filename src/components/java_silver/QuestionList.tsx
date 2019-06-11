@@ -8,7 +8,7 @@ import { match } from 'react-router';
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     content: {
-      width: 'auto',
+      width: `100%`,
       marginTop: theme.spacing(3),
       padding: theme.spacing(2),
       [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {

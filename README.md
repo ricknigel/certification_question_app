@@ -13,6 +13,6 @@ firebase-react-app
 * issueList
 * favorite フィルタ
 * 回答正解率
-* 認証認証
+* 認証機能
 * 検索機能
 * 分析機能

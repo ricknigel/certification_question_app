@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-end',
     },
     optionText: {
-      wordBreak: 'break-all',
+      wordWrap: 'break-word',
     },
     result: {
       textAlign: 'center',
@@ -74,6 +74,11 @@ const Question = (props: Props & RouteComponentProps) => {
     setErrMessage('');
     const correctIndex = item.options.reduce((arr: number[], val, i) => 
       (val.isAnswer && arr.push(i), arr), []);
+
+    // 選択肢を昇順にソート
+    checked.sort((a, b) => {
+      return a - b;
+    });
 
     const res = checked.toString() !== correctIndex.toString();
 

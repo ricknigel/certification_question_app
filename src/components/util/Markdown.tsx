@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
 import marked from 'marked';
-import hljs from 'highlight.js';
 import { Typography, Divider, makeStyles, Theme } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 
