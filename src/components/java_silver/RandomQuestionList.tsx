@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles, Theme, CircularProgress, Fab } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
-import QuestionInfo, { generateRandom, PER_PAGE, javaQuery } from '../util/types';
+import QuestionInfo, { generateRandom, PER_PAGE, javaQuery, getZeroOrOne } from '../util/types';
 import Question from './Question';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -36,20 +36,6 @@ const RandomQuestionList = () => {
   const [progress, setProgress] = useState(false);
   const [morePro, setMorePro] = useState(false);
 
-  useEffect(() => {
-    setProgress(false);
-    getQuestion(makeSortQuery())
-    .then(() => {
-      setProgress(true);
-      setMorePro(true);
-    })
-    .catch((err) => console.log(err));
-  }, [setQuestionList]);
-
-  useEffect(() => {
-    questionList.length !== 0 && updateRandom();
-  }, [questionList]);
-
   const handleLoadQuestion = () => {
     setMorePro(false);
     setQuestionList([]);
@@ -78,40 +64,44 @@ const RandomQuestionList = () => {
             modifiedAt: doc.get('modifiedAt'),
             answerTimes: doc.get('answerTimes'),
             correctTimes: doc.get('correctTimes'),
-            favorite: doc.get('favorite')
+            favorite: doc.get('favorite'),
           }
           addQuestionList.push(addQuestion);
         });
         setQuestionList(() => addQuestionList);
         resolve(resp.size);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => console.log(err));
     })
   }
 
   const makeSortQuery = () => {
-    let sortQuery = getZeroOrOne() === 0 ? javaQuery.orderBy('random', 'asc') : javaQuery.orderBy('random', 'desc');
-    sortQuery = getZeroOrOne() === 0 ? sortQuery.startAt(generateRandom()) : sortQuery.endAt(generateRandom());
-
-    return sortQuery;
+    const operation = getZeroOrOne() === 0 ? '<' : '>';
+    return javaQuery.where('random', operation, generateRandom());
   }
 
-  const getZeroOrOne = () => {
-    return Math.floor(Math.random() * 2);
-  }
-
-  const updateRandom = () => {
+  const updateRandom = useCallback(() => {
     questionList.map(item => (
       javaQuery.doc(item.id).update({
         random: generateRandom()
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch(err => console.log(err))
     ));
-  }
+  }, [questionList]);
+
+  useEffect(() => {
+    setProgress(false);
+    getQuestion(makeSortQuery())
+    .then(() => {
+      setProgress(true);
+      setMorePro(true);
+    })
+    .catch(err => console.log(err));
+  }, [setQuestionList]);
+
+  useEffect(() => {
+    questionList.length !== 0 && updateRandom();
+  }, [questionList, updateRandom]);
 
   return (
     <div className={classes.content}>

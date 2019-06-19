@@ -54,4 +54,8 @@ export const generateRandom = (): number => {
   return Math.floor(Math.random() * (MAX - MIN + 1) + MIN);
 }
 
+export const getZeroOrOne = () => {
+  return Math.floor(Math.random() * 2);
+}
+
 export const javaQuery = firestore.collection('java_silver');

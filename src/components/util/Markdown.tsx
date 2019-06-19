@@ -1,12 +1,14 @@
 import React, { Fragment, useEffect } from 'react';
 import marked from 'marked';
+// import hljs from 'highlight.js';
 import { Typography, Divider, makeStyles, Theme } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
+// import '../../css/Markdown.css';
 
-const useStyles = makeStyles((theme: Theme) => 
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => createStyles({
     mark: {
       '& pre': {
+        position: 'relative',
         padding: '12px 18px',
         backgroundColor: theme.palette.grey[100],
         overflow: 'auto',
@@ -34,7 +36,9 @@ const Markdown = (props: Props) => {
   useEffect(() => {
     const renderer = new marked.Renderer();
     renderer.code = function(code, language) {
-      return '<pre' + '><code class="line-numbers">' + code + '</code></pre>'; 
+      // const a = code.split(/[{};]/);
+      // console.log(a);
+      return '<pre><code class="line-numbers">' + code + '</code></pre>';
     };
     marked.setOptions({
       gfm: true,

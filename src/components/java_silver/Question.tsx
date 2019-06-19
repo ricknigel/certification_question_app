@@ -26,7 +26,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
     },
     detail: {
+      fontSize: '12px',
       overflow: 'auto',
+      WebkitOverflowScrolling: 'touch',
     },
     dialog: {
       display: 'flex',
@@ -220,7 +222,7 @@ const Question = (props: Props & RouteComponentProps) => {
           <DialogContent className={classes.dialogText}>
             <Warning color="error" />
             <Typography color="error">
-                {'Question' + '「' + item.part + '-' + item.questionNo + '」 delete'}
+                {'Question 「' + item.part + '-' + item.questionNo + '」 delete'}
             </Typography>
           </DialogContent>
           <DialogActions>

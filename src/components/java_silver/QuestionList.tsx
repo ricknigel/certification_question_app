@@ -101,7 +101,7 @@ const QuestionList = (props: Props) => {
               <Question key={item.id} item={item} />
             ))}
           </Fragment> : <p>Nothing Register Question</p> }
-          { page == PER_PAGE && 
+          { page === PER_PAGE && 
             <Fab 
               className={classes.moreButton} 
               variant="extended" 

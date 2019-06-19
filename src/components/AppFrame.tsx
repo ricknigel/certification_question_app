@@ -7,11 +7,11 @@ const AppFrame = () => {
 
   const handleDrawerOpen = useCallback(() => {
     setOpen(true);
-  }, [open]);
+  }, [setOpen]);
 
   const handleDrawerClose = useCallback(() => {
     setOpen(false);
-  }, [open]);
+  }, [setOpen]);
 
   return (
     <Fragment>

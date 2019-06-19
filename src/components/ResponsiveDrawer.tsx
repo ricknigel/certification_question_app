@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hidden, Drawer, makeStyles, Theme, SwipeableDrawer } from '@material-ui/core';
+import { Hidden, Drawer, makeStyles, SwipeableDrawer } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import MyDrawerContent from './MyDrawerContent';
 import { drawerWidth } from './util/types';

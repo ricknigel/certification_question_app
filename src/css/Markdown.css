@@ -1,0 +1,16 @@
+.line-numbers {
+  top: 0;
+  left: 0;
+  border-right: 1px solid #999;
+}
+
+.line-numbers > span {
+  float: left;
+  display: block;
+  counter-increment: linenumber;
+  text-align: left;
+}
+
+.line-numbers > span::before {
+  content: counter(linenumber);
+}

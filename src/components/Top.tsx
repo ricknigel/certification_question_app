@@ -31,7 +31,7 @@ const Top = () => {
         </Grid>
         <Grid>
           <CardContent>
-            <Typography><a href="https://github.com/rick-mo/certification_question_app" target="_blank">github</a></Typography>
+            <Typography><a href="https://github.com/rick-mo/certification_question_app" target="_blank" rel="noopener noreferrer">github</a></Typography>
             <Typography><Link to="/issue">Issue List</Link></Typography>
           </CardContent>
         </Grid>

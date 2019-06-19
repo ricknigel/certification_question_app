@@ -33,7 +33,7 @@ const OptionList = (props: Props) => {
   const handleRegisterClose = useCallback((add: OptionInfo) => {
     addOptions([...options, add]);
     setOpenRegister(() => false);
-  }, [options, setOpenRegister]);
+  }, [addOptions, options, setOpenRegister]);
 
   const handleEditorClose = useCallback((editOpt: OptionInfo) => {
     const editOptions = [...options];
@@ -43,7 +43,7 @@ const OptionList = (props: Props) => {
     }
     addOptions(editOptions);
     setOpenEditor(() => false);
-  }, [options, setOpenEditor, optionIndex]);
+  }, [addOptions, options, setOpenEditor, optionIndex]);
 
   const editorOption = useCallback((index: number) => {
     setOpenEditor(() => true);
@@ -52,10 +52,10 @@ const OptionList = (props: Props) => {
 
   const removeOption = useCallback((targetIndex: number) => {
     const newOptions = options.filter((value, index) => {
-      return index != targetIndex;
+      return index !== targetIndex;
     });
     addOptions(newOptions);
-  }, [options]);
+  }, [options, addOptions]);
 
   return (
     <Paper className={classes.paper}>
