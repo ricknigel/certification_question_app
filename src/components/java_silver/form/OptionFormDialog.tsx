@@ -78,6 +78,7 @@ const OptionFormDialog = (props: Props) => {
         <TextField 
           autoFocus
           required
+          multiline
           error={optionName ? false : true}
           label="OptionName"
           value={optionName}

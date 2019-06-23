@@ -1,11 +1,13 @@
 import React, { useState, Fragment } from 'react';
-import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, makeStyles, Theme, Button, ExpansionPanelActions, IconButton, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Grow } from '@material-ui/core';
+import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, makeStyles, Theme, Button, Grow } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
-import { ExpandMore, Check, Close, Clear, DoneOutline, Edit, Delete, Warning, Favorite } from '@material-ui/icons';
+import { Check, Close, Clear, DoneOutline } from '@material-ui/icons';
 import QuestionInfo, { javaQuery } from '../util/types';
 import Markdown from '../util/Markdown';
 import * as firebase from 'firebase/app';
 import { withRouter, RouteComponentProps } from 'react-router';
+import DeleteDialog from './DeleteDialog';
+import Explanation from './Explanation';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -21,24 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     optionText: {
       wordWrap: 'break-word',
+      whiteSpace: 'pre-wrap',
     },
     result: {
       textAlign: 'center',
-    },
-    detail: {
-      fontSize: '12px',
-      overflow: 'auto',
-      WebkitOverflowScrolling: 'touch',
-    },
-    dialog: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    dialogText: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
     },
   }),
 );
@@ -122,7 +110,6 @@ const Question = (props: Props & RouteComponentProps) => {
       modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then(() => {
-      console.log('successfully updated');
       history.push({
         pathname: '/complete',
         state: {
@@ -134,6 +121,10 @@ const Question = (props: Props & RouteComponentProps) => {
     .catch((err) => {
       console.log(err);
     });
+  }
+
+  const handleReport = () => {
+
   }
 
   return (
@@ -181,55 +172,22 @@ const Question = (props: Props & RouteComponentProps) => {
                 </Typography>
               </Fragment> }
           </div> }
-        <ExpansionPanel expanded={expand}>
-          <ExpansionPanelSummary 
-            expandIcon={<ExpandMore />}
-            onClick={() => setExpand(!expand)}
-          >
-            Explanation
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.detail}>
-            <Markdown input={item.explanation} />
-          </ExpansionPanelDetails>
-          <ExpansionPanelActions>
-            <Tooltip title="favorite">
-              <IconButton onClick={handleFavorite}>
-                {fav ? <Favorite color="error" />
-                  : <Favorite /> }
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="edit question">
-              <IconButton onClick={editorQuestion}>
-                <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="delete question">
-              <IconButton onClick={() => setOpenDelete(true)}>
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          </ExpansionPanelActions>
-        </ExpansionPanel>
-        <Dialog open={openDelete} onClick={handleClose}>
-          <DialogTitle>
-            <div className={classes.dialog}>
-              <Typography variant="h6">Delete Question</Typography>
-              <IconButton size="small" onClick={handleClose}>
-                <Close />
-              </IconButton>
-            </div>
-          </DialogTitle>
-          <DialogContent className={classes.dialogText}>
-            <Warning color="error" />
-            <Typography color="error">
-                {'Question 「' + item.part + '-' + item.questionNo + '」 delete'}
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" onClick={handleClose}>Cancel</Button>
-            <Button color="primary" onClick={deleteQuestion}>Delete</Button>
-          </DialogActions>
-        </Dialog>
+        <Explanation 
+          expand={expand}
+          explanation={item.explanation}
+          setExpand={setExpand}
+          handleReport={handleReport}
+          fav={fav}
+          handleFavorite={handleFavorite}
+          editorQuestion={editorQuestion}
+          setOpenDelete={setOpenDelete}
+        />
+        <DeleteDialog 
+          openDelete={openDelete}
+          number={'Question 「' + item.part + '-' + item.questionNo + '」 delete'}
+          handleClose={handleClose}
+          deleteQuestion={deleteQuestion}
+        />
       </Paper>
     </Grow>
   );

@@ -1,7 +1,16 @@
 import React, { memo } from 'react';
-import { TableRow, TableCell, IconButton, Tooltip } from '@material-ui/core';
+import { TableRow, TableCell, IconButton, Tooltip, makeStyles } from '@material-ui/core';
 import { Edit, Delete, Check, Close } from '@material-ui/icons';
 import { OptionInfo } from '../../util/types';
+import { createStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles(() => 
+  createStyles({
+    option: {
+      whiteSpace: 'pre-wrap',
+    },
+  }),
+);
 
 interface Props {
   index: number,
@@ -12,6 +21,7 @@ interface Props {
 
 const OptionBody = memo((props: Props) => {
   const { index, option, editOption, removeOption } = props;
+  const classes = useStyles();
   return (
     <TableRow>
       <TableCell>
@@ -32,7 +42,7 @@ const OptionBody = memo((props: Props) => {
           </IconButton>
         </Tooltip>
       </TableCell>
-      <TableCell>{option.optionName}</TableCell>
+      <TableCell className={classes.option}>{option.optionName}</TableCell>
       <TableCell>
         { option.isAnswer ? <Check color="secondary" /> : <Close color="error" /> }
       </TableCell>
